@@ -13,6 +13,12 @@
 
 
 struct Engine {
+    /*
+     * Main parent class for the UCI engine.
+     * To write an AI, the idea is that you can inherit this class and then override some of the Handle- functions.
+     * For a very basic AI, you would only need to implement HandleNewGame, HandlePosFen/HandleStartPos and HandleGo.
+     * */
+
     Engine();
 
     int Run();
@@ -62,7 +68,9 @@ protected:
     virtual void HandleSetOption(const std::string& name, const std::string& value) { }
 
     /*
-     * Start a new game
+     * this is sent to the engine when the next search (started with "position" and "go") will be from
+     * a different game. This can be a new game the engine should play or a new game it should analyse but
+     * also the next position from a testsuite with positions only.
      * */
     virtual void HandleNewGame() { }
 
