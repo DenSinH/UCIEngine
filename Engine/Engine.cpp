@@ -188,14 +188,23 @@ void Engine::ParseCommand(const std::string& line) {
             if (line.starts_with("position")) {
                 std::vector<std::string> moves{};
                 const std::regex word_regex("(\\w+)");
-                for (auto word = std::sregex_iterator(line.begin() + 8, line.end(), word_regex); word != std::sregex_iterator(); word++) {
-                    moves.push_back(word->str());
-                }
-                if (line.find("fen", 9, 3)) {
+                auto word = std::sregex_iterator(line.begin() + 9, line.end(), word_regex);
+
+                if (word->str() == "fen") {
+                    word++;  // fen
+                    word++;  // moves
+                    for (; word != std::sregex_iterator(); word++) {
+                        moves.push_back(word->str());
+                    }
                     queue.push({CommandType::PosFen, std::move(moves)});
                     return;
                 }
-                else if (line.find("startpos", 9, 8)) {
+                else if (word->str() == "startpos") {
+                    word++;  // startpos
+                    word++;  // moves
+                    for (; word != std::sregex_iterator(); word++) {
+                        moves.push_back(word->str());
+                    }
                     queue.push({CommandType::PosStart, std::move(moves)});
                     return;
                 }
@@ -236,7 +245,7 @@ void Engine::ParseCommand(const std::string& line) {
                                 word++;
                                 search.wtime = std::stoi(word->str());
                             }
-                            else if (line.find("winc", 3, 4)) {
+                            else if (_word == "winc") {
                                 word++;
                                 search.winc = std::stoi(word->str());
                             }
@@ -247,7 +256,7 @@ void Engine::ParseCommand(const std::string& line) {
                                 word++;
                                 search.btime = std::stoi(word->str());
                             }
-                            else if (line.find("binc", 3, 4)) {
+                            else if (_word == "binc") {
                                 word++;
                                 search.binc = std::stoi(word->str());
                             }

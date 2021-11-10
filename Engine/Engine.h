@@ -117,10 +117,11 @@ protected:
      * */
     virtual void HandleQuit() { }
 
-private:
+protected:
 #ifndef NDEBUG
     std::ofstream debug{"./debug.txt"};
 #endif
+private:
     bool shutdown = false;
 
     void HandleUCI();
